@@ -4,7 +4,7 @@ namespace RPG;
 public class Personaje{
     public Personaje(){}
     public int Velocidad;
-    public int Destresa;
+    public int Destreza;
     public int Fuerza;
     public int Nivel;
     public int Armadura;
