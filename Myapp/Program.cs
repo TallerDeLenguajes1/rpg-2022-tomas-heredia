@@ -3,11 +3,13 @@ using RPG;
 public class program
 {
     public static int total = 4;
-    public static int Restantes = total;
+    
+    
     public static string[] Nombres = {"Tomas", "Irina","Gonsalo","Maria"," Pepe", "juanita","Tulio"};
     public static string[] Apodos = {"Aniquilador", "Fachero","TuNoMeteCabraSarabanbichuie","Pablito","Muchitastico","Frijolito","EL maestro del surf"};
     public static string[] Tipos  = {"Guerrero","Ladron","Paladin"};
     public static void Main(String[] args){
+        int restantes = total;
         //lista de participantes
         Console.WriteLine("Bienvenido al super torneo de peleas luchonas");
         //creo personajes
@@ -26,14 +28,50 @@ public class program
             MostrarPersonajeDatos(Participantes[i]);
             MostrarPersonajeCaracteristicas(Participantes[i]);
         }
-        //array con los participantes que ganan;
-        Personaje[] EnCarrera = new Personaje[total/2];
+        //1er round
+        List<Personaje> EnCarrera = new List<Personaje>(); 
+        Personaje Ganador = new Personaje();   
         for (int i = 0; i < total; i = i + 2)
         {
-            Personaje Ganador = new Personaje();
+            
             Ganador = Combate(Participantes[i], Participantes[i+1]);
-
+            if (Ganador != null)
+            {
+                Ganador = Bonus(Ganador);
+                EnCarrera.Add(Ganador);
+                restantes -= 1;
+            }else
+            {
+                restantes -= 2;
+            }
         }
+        //2do round
+        if (restantes > 1)
+        {
+           
+            
+            Ganador = Combate(EnCarrera[0], EnCarrera[1]);
+            if (Ganador != null)
+            {
+                Ganador = Bonus(Ganador);
+                
+                restantes -= 1;
+            }else
+            {
+                restantes -= 2;
+            }
+        }
+        if (restantes == 1)
+        {
+            Console.WriteLine("---------¡¡¡¡GANADOR!!!!------------");
+            MostrarPersonajeDatos(Ganador);
+        }else
+        {
+            Console.WriteLine("Todos perdieron");
+        }
+        
+        
+        
     }
 
     public static Personaje CreacionAleatoria(){
@@ -61,7 +99,7 @@ public class program
     public static DateTime CrearFechaAleatoria()
     {
         Random aleatorio = new Random();
-        return new DateTime(aleatorio.Next(1980, 2005), aleatorio.Next(1, 13), aleatorio.Next(1, 28), aleatorio.Next(25), aleatorio.Next(60), aleatorio.Next(60));
+        return new DateTime(aleatorio.Next(1980, 2005), aleatorio.Next(1, 12), aleatorio.Next(1, 28));
     }
 
     public static void MostrarPersonajeDatos(Personaje P){
@@ -82,8 +120,8 @@ public class program
         Console.WriteLine("Armadura: "+ P.Armadura);
     }
     public static Personaje Combate(Personaje P1,Personaje P2){
-        int P1Salud = P1.Salud;
-        int P2Salud = P2.Salud; 
+        float P1Salud = P1.Salud;
+        float P2Salud = P2.Salud; 
         for (int i = 0; i < 4; i++)
         {   if (P1.Salud>0 && P2.Salud>0)
             {
@@ -94,6 +132,13 @@ public class program
                     if (P2.Salud > 0)
                     {
                         P1.Salud = P1.Salud - ((ValorAtaque(P2)-ValorDefenza(P1))/50000)*100;
+                    }
+                }else
+                {
+                    P1.Salud = P1.Salud - ((ValorAtaque(P2)-ValorDefenza(P1))/50000)*100;
+                    if (P1.Salud > 0)
+                    {
+                        P2.Salud = P2.Salud - ((ValorAtaque(P1)-ValorDefenza(P2))/50000)*100;
                     }
                 }
             }
@@ -154,7 +199,7 @@ public class program
     }
 
     //calculo de los aumentos por victoria
-    public static Personaje bonus(Personaje P){
+    public static Personaje Bonus(Personaje P){
         Random aleatorio = new Random();
         switch (aleatorio.Next(1,6))
         {

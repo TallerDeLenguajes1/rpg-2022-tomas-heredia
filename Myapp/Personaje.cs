@@ -13,5 +13,5 @@ public class Personaje{
     public string Apodo;
     public DateTime Nacimiento;
     public int Edad;
-    public int Salud;
+    public float Salud;
 }
