@@ -8,7 +8,7 @@ public class Personaje{
     public int Fuerza;
     public int Nivel;
     public int Armadura;
-    public string[] tipo = {"Guerrero","Ladron","Paladin"};
+    public string Tipo;
     public string Nombre;
     public string Apodo;
     public DateTime Nacimiento;
