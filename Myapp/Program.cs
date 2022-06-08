@@ -61,10 +61,12 @@ public class program
                 restantes -= 2;
             }
         }
-        if (restantes == 1)
+        if (restantes == 1 && Ganador != null)
         {
             Console.WriteLine("---------¡¡¡¡GANADOR!!!!------------");
             MostrarPersonajeDatos(Ganador);
+            guardado(Ganador);
+
         }else
         {
             Console.WriteLine("Todos perdieron");
@@ -233,6 +235,21 @@ public class program
         {
             return valor;
         }
+    }
+
+    //guardado de archivo
+    public static void guardado(Personaje Ganador){
+        string NombreArchivo = @"C:\Users\usuario\Documents\1er2022\taller1\ganadores\ListaGanadores.csv";
+
+        if(!File.Exists(NombreArchivo)){
+            File.Create(NombreArchivo);
+        }
+        FileStream filestream = new FileStream(NombreArchivo, FileMode.Open);
+        StreamWriter streamWriter = new StreamWriter(filestream);
+
+        streamWriter.WriteLine(Ganador.Nombre +"; "+Ganador.Apodo+ "; "+Ganador.Tipo+"; "+"Lv: "+ Ganador.Nivel+";");
+        streamWriter.Close();
+        filestream.Close();
     }
 }
 
