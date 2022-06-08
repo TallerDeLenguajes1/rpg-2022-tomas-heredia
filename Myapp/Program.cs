@@ -120,25 +120,25 @@ public class program
         Console.WriteLine("Armadura: "+ P.Armadura);
     }
     public static Personaje Combate(Personaje P1,Personaje P2){
-        float P1Salud = P1.Salud;
-        float P2Salud = P2.Salud; 
+        int P1Salud = P1.Salud;
+        int P2Salud = P2.Salud; 
         for (int i = 0; i < 4; i++)
         {   if (P1.Salud>0 && P2.Salud>0)
             {
 
                 if (Turnos(P1,P2) == 1)
                 {
-                    P2.Salud = P2.Salud - ((ValorAtaque(P1)-ValorDefenza(P2))/50000)*100;
+                    P2.Salud = P2.Salud - normalizador(((ValorAtaque(P1)-ValorDefenza(P2))/50)*100);
                     if (P2.Salud > 0)
                     {
-                        P1.Salud = P1.Salud - ((ValorAtaque(P2)-ValorDefenza(P1))/50000)*100;
+                        P1.Salud = P1.Salud - normalizador(((ValorAtaque(P2)-ValorDefenza(P1))/50)*100);
                     }
                 }else
                 {
-                    P1.Salud = P1.Salud - ((ValorAtaque(P2)-ValorDefenza(P1))/50000)*100;
+                    P1.Salud = P1.Salud - normalizador(((ValorAtaque(P2)-ValorDefenza(P1))/50)*100);
                     if (P1.Salud > 0)
                     {
-                        P2.Salud = P2.Salud - ((ValorAtaque(P1)-ValorDefenza(P2))/50000)*100;
+                        P2.Salud = P2.Salud - normalizador(((ValorAtaque(P1)-ValorDefenza(P2))/50)*100);
                     }
                 }
             }
@@ -223,6 +223,16 @@ public class program
                 break;
         }
         return P;
+    }
+
+    public static int normalizador(int valor){
+        if (valor < 0)
+        {
+            return 0;
+        }else
+        {
+            return valor;
+        }
     }
 }
 
