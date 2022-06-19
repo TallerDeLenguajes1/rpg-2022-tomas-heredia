@@ -41,6 +41,7 @@ public class program
 
         if (eleccion == 1)
         {
+            LimpiarJson();
             for (int i = 0; i < total; i++)
             {
                 Personaje personaje = new Personaje();
@@ -288,5 +289,21 @@ public class program
         }
         return EnCarrera;
     }
+
+    public static void LimpiarJson(){
+
+        
+        if (!File.Exists(NombreArchivoJson))                                               
+        {
+            
+  
+            FileStream filestreamJson = new FileStream(NombreArchivoJson, FileMode.Open);           
+            filestreamJson.SetLength(0);
+
+            filestreamJson.Close();  //cierro
+        }
+            
+            
+        }
 }
 
