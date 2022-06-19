@@ -1,71 +1,77 @@
 ﻿using System;
 using RPG;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 public class program
 {
     public static int total = 4;
-    
+   
+    public static string NombreArchivoJson = @"C:\Users\usuario\Documents\1er2022\taller1\ganadores\Participantes.json";  //ubicacion del json
     
     public static string[] Nombres = {"Tomas", "Irina","Gonsalo","Maria"," Pepe", "juanita","Tulio"};
     public static string[] Apodos = {"Aniquilador", "Fachero","TuNoMeteCabraSarabanbichuie","Pablito","Muchitastico","Frijolito","EL maestro del surf"};
     public static string[] Tipos  = {"Guerrero","Ladron","Paladin"};
     public static void Main(String[] args){
-        int restantes = total;
+        
         //lista de participantes
         Console.WriteLine("Bienvenido al super torneo de peleas luchonas");
         //creo personajes
-        Personaje[] Participantes = new Personaje[4];
+        List<Personaje> Participantes = new List<Personaje>();
 
-        for (int i = 0; i < total; i++)
+        Console.WriteLine("1_Crear participantes nuevos. ");
+        Console.WriteLine("2_ Usar personajes viejos.");
+        string texto = Console.ReadLine();
+        int eleccion = Int32.Parse(texto);
+        if (eleccion == 2)
         {
-            Personaje personaje = new Personaje();
-            personaje = CreacionAleatoria();
-            Participantes[i] = personaje; 
+            if (!File.Exists(NombreArchivoJson))
+            {
+                Console.WriteLine("No existe un Json de participantes. Creando nuevos participantes...");
+                eleccion = 1;
+            }else       // aqui habro el json de participantes y  los deserealiso en la lista de participantes
+            {
+                StreamReader sr = new StreamReader(NombreArchivoJson);
+                string datoJson = sr.ReadLine();
+            
+                Participantes = JsonSerializer.Deserialize<List<Personaje>>(datoJson);
+
+                sr.Close();
+            }
         }
 
-        
-        for (int i = 0; i < total; i++)
+        if (eleccion == 1)
         {
-            MostrarPersonajeDatos(Participantes[i]);
-            MostrarPersonajeCaracteristicas(Participantes[i]);
+            for (int i = 0; i < total; i++)
+            {
+                Personaje personaje = new Personaje();
+                personaje = CreacionAleatoria();
+                Participantes.Add(personaje); 
+            }
+            
+        }
+            
+        guardarParticipantes(Participantes);
+        
+        for (int i = 0; i < Participantes.Count; i++)
+        {
+            Participantes[i].MostrarPersonajeDatos();
+            Participantes[i].MostrarPersonajeCaracteristicas();
+        }
+
+        while (Participantes.Count > 1)
+        {
+            Participantes = clasificaciones(Participantes);
         }
         //1er round
-        List<Personaje> EnCarrera = new List<Personaje>(); 
-        Personaje Ganador = new Personaje();   
-        for (int i = 0; i < total; i = i + 2)
-        {
-            
-            Ganador = Combate(Participantes[i], Participantes[i+1]);
-            if (Ganador != null)
-            {
-                Ganador = Bonus(Ganador);
-                EnCarrera.Add(Ganador);
-                restantes -= 1;
-            }else
-            {
-                restantes -= 2;
-            }
-        }
+       
         //2do round
-        if (restantes > 1)
-        {
-           
-            
-            Ganador = Combate(EnCarrera[0], EnCarrera[1]);
-            if (Ganador != null)
-            {
-                Ganador = Bonus(Ganador);
-                
-                restantes -= 1;
-            }else
-            {
-                restantes -= 2;
-            }
-        }
-        if (restantes == 1 && Ganador != null)
+        
+
+        if (Participantes.Count == 1 && Participantes[0] != null)
         {
             Console.WriteLine("---------¡¡¡¡GANADOR!!!!------------");
-            MostrarPersonajeDatos(Ganador);
-            guardado(Ganador);
+            Participantes[0].MostrarPersonajeDatos();
+            guardado(Participantes[0]);
 
         }else
         {
@@ -80,14 +86,14 @@ public class program
         
         Random rand = new Random();
         Personaje personajeAux = new Personaje();
+        personajeAux.Nombre = Nombres[rand.Next(0,Nombres.Length)];
+        personajeAux.Apodo = Apodos[rand.Next(0,Apodos.Length)];
         personajeAux.Salud = 100;
         personajeAux.Armadura = rand.Next(1,10);
         personajeAux.Destreza = rand.Next(1,10);
         personajeAux.Fuerza = rand.Next(1,10);
         personajeAux.Nivel = rand.Next(1,10);
         personajeAux.Velocidad = rand.Next(1,10);
-        personajeAux.Nombre = Nombres[rand.Next(0,Nombres.Length)];
-        personajeAux.Apodo = Apodos[rand.Next(0,Apodos.Length)];
         personajeAux.Nacimiento = CrearFechaAleatoria();
         DateTime FActual = DateTime.Now;
         personajeAux.Edad = FActual.Year - personajeAux.Nacimiento.Year;
@@ -104,23 +110,9 @@ public class program
         return new DateTime(aleatorio.Next(1980, 2005), aleatorio.Next(1, 12), aleatorio.Next(1, 28));
     }
 
-    public static void MostrarPersonajeDatos(Personaje P){
-        Console.WriteLine("-------------Datos-------------");
-        Console.WriteLine("Nombre: "+ P.Nombre);
-        Console.WriteLine("Apodo: "+ P.Apodo);
-        Console.WriteLine("Edad: "+ P.Edad);
-        Console.WriteLine("Fecha de nacimiento: "+ P.Nacimiento);
-        Console.WriteLine("Tipo: "+ P.Tipo);
-    }
+    
 
-    public static void MostrarPersonajeCaracteristicas(Personaje P){
-        Console.WriteLine("-------------Caracteristicas-------------");
-        Console.WriteLine("Nivel: "+ P.Nivel);
-        Console.WriteLine("Velocidad: "+ P.Velocidad);
-        Console.WriteLine("Destreza: "+ P.Destreza);
-        Console.WriteLine("Fuerza: "+ P.Fuerza);
-        Console.WriteLine("Armadura: "+ P.Armadura);
-    }
+    
     public static Personaje Combate(Personaje P1,Personaje P2){
         int P1Salud = P1.Salud;
         int P2Salud = P2.Salud; 
@@ -250,6 +242,51 @@ public class program
         streamWriter.WriteLine(Ganador.Nombre +"; "+Ganador.Apodo+ "; "+Ganador.Tipo+"; "+"Lv: "+ Ganador.Nivel+";");
         streamWriter.Close();
         filestream.Close();
+    }
+
+    public static void guardarParticipantes(List<Personaje> Participantes){
+        
+
+        if (!File.Exists(NombreArchivoJson))                                                //si no existe el archivo lo crea
+        {
+            
+            File.Create(NombreArchivoJson);
+            
+        }
+        string json;                                                                    //string para lo  que devuelva el stream serialize
+        
+
+        FileStream filestreamJson = new FileStream(NombreArchivoJson, FileMode.Open);           
+        StreamWriter streamWriterJson = new StreamWriter(filestreamJson);
+
+        json =  JsonSerializer.Serialize(Participantes);                            //serializa la lista
+            
+        streamWriterJson.WriteLine(json);                                           //escribo en el json
+
+        streamWriterJson.Close();                                                       //cierro
+        filestreamJson.Close();
+    }
+
+    public static List<Personaje> clasificaciones(List<Personaje> Participantes){
+        List<Personaje> EnCarrera = new List<Personaje>(); 
+        Personaje Ganador = new Personaje();
+        int restantes = Participantes.Count;   
+        int total = restantes;
+        for (int i = 0; i < total; i = i + 2)
+        {
+            
+            Ganador = Combate(Participantes[i], Participantes[i+1]);
+            if (Ganador != null)
+            {
+                Ganador = Bonus(Ganador);
+                EnCarrera.Add(Ganador);
+                restantes -= 1;
+            }else
+            {
+                restantes -= 2;
+            }
+        }
+        return EnCarrera;
     }
 }
 
