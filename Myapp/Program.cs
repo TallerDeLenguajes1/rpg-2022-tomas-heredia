@@ -8,17 +8,39 @@ public class program
    
     public static string NombreArchivoJson = @"C:\Users\usuario\Documents\1er2022\taller1\ganadores\Participantes.json";  //ubicacion del json
     
-    public static string[] Nombres = {"Tomas", "Irina","Gonsalo","Maria"," Pepe", "juanita","Tulio"};
+    public static string[] Nombres = {"Tomas", "Irina","Gonsalo","Maria"," Pepe", "juanita","Tulio","Joaquin","Fernada","Miguel","Juan","Dario", "Emilio"}; //nombres, apodos y clases para los Pj
     public static string[] Apodos = {"Aniquilador", "Fachero","TuNoMeteCabraSarabanbichuie","Pablito","Muchitastico","Frijolito","EL maestro del surf"};
-    public static string[] Tipos  = {"Guerrero","Ladron","Paladin"};
+    public static string[] Tipos  = {"Guerrero","Ladron","Paladin","Monje","Espadachin","Artifice"};
     public static void Main(String[] args){
         
         //lista de participantes
-        Console.WriteLine("Bienvenido al super torneo de peleas luchonas");
+        Console.WriteLine("-----------------¡¡Bienvenido al super torneo de peleas luchonas!!----------------- ");
+        Console.WriteLine(@"                       *******************************,**,                      
+                          ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,                         
+                     ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,                    
+                     ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,*                    
+                     *,.   ,,,,,,,,,,,,,,,,,,,,,,,,,,,   ,,                     
+                      ,,   .,,,,,,,,,,,,,,,,,,,,,,,,,   .,,                     
+                       *,   ,,,,,,,,,,,,,,,,,,,,,,,,.  ,,,                      
+                        ,,,  ,,,,,,,,,,,,,,,,,,,,,,.  *,                        
+                          ,,, ,,,,,,,,,,,,,,,,,,,,. *,.                         
+                            .,,,,,,,,,,,,,,,,,,,,,,,                            
+                                *,,,,,,,,,,,,,,,,                               
+                                   ,,,,,,,,,,.                                  
+                                    .****/*/                                    
+                                      *****                                     
+                                     ,,,,,,                                     
+                                    ,,,,,,,,,                                   
+                                 .,,,,,,,,,,,,,                                 
+                             ,,*******************,.                            
+                              .***,,,,,,,,,,,,,***                              
+                              .***,,,,,,,,,,,,,***                              
+                              .*****,*,*,*,*,*****                              
+                             .,,,,,,,,,,,,,,,,,,,,,  ");
         //creo personajes
         List<Personaje> Participantes = new List<Personaje>();
 
-        Console.WriteLine("1_Crear participantes nuevos. ");
+        Console.WriteLine("\n1_ Crear participantes nuevos. ");                                         //crea nuevos pj o usa viejos
         Console.WriteLine("2_ Usar personajes viejos.");
         string texto = Console.ReadLine();
         int eleccion = Int32.Parse(texto);
@@ -39,9 +61,9 @@ public class program
             }
         }
 
-        if (eleccion == 1)
+        if (eleccion == 1)                                      
         {
-            LimpiarJson();
+            LimpiarJson();                                      //limpia el viejo Json
             for (int i = 0; i < total; i++)
             {
                 Personaje personaje = new Personaje();
@@ -53,30 +75,45 @@ public class program
             
         guardarParticipantes(Participantes);
         
-        for (int i = 0; i < Participantes.Count; i++)
+        for (int i = 0; i < Participantes.Count; i++) //muestra
         {
             Participantes[i].MostrarPersonajeDatos();
             Participantes[i].MostrarPersonajeCaracteristicas();
         }
 
-        while (Participantes.Count > 1)
+        int NCombate = 0;
+        while (Participantes.Count > 1)      //combates
         {
-            Participantes = clasificaciones(Participantes);
+            Participantes = clasificaciones(Participantes,NCombate);
         }
-        //1er round
-       
-        //2do round
+        
         
 
         if (Participantes.Count == 1 && Participantes[0] != null)
         {
-            Console.WriteLine("---------¡¡¡¡GANADOR!!!!------------");
+            Console.WriteLine("");
+            Console.WriteLine(@" ██████╗  █████╗ ███╗   ██╗ █████╗ ██████╗  ██████╗ ██████╗ 
+██╔════╝ ██╔══██╗████╗  ██║██╔══██╗██╔══██╗██╔═══██╗██╔══██╗
+██║  ███╗███████║██╔██╗ ██║███████║██║  ██║██║   ██║██████╔╝
+██║   ██║██╔══██║██║╚██╗██║██╔══██║██║  ██║██║   ██║██╔══██╗
+╚██████╔╝██║  ██║██║ ╚████║██║  ██║██████╔╝╚██████╔╝██║  ██║
+ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝");
             Participantes[0].MostrarPersonajeDatos();
             guardado(Participantes[0]);
 
         }else
         {
-            Console.WriteLine("Todos perdieron");
+            Console.WriteLine("");   
+            Console.WriteLine(@"▄▄▄█████▓ ▒█████  ▓█████▄  ▒█████    ██████     ██▓███  ▓█████  ██▀███  ▓█████▄  ██▓▓█████  ██▀███   ▒█████   ███▄    █ 
+▓  ██▒ ▓▒▒██▒  ██▒▒██▀ ██▌▒██▒  ██▒▒██    ▒    ▓██░  ██▒▓█   ▀ ▓██ ▒ ██▒▒██▀ ██▌▓██▒▓█   ▀ ▓██ ▒ ██▒▒██▒  ██▒ ██ ▀█   █ 
+▒ ▓██░ ▒░▒██░  ██▒░██   █▌▒██░  ██▒░ ▓██▄      ▓██░ ██▓▒▒███   ▓██ ░▄█ ▒░██   █▌▒██▒▒███   ▓██ ░▄█ ▒▒██░  ██▒▓██  ▀█ ██▒
+░ ▓██▓ ░ ▒██   ██░░▓█▄   ▌▒██   ██░  ▒   ██▒   ▒██▄█▓▒ ▒▒▓█  ▄ ▒██▀▀█▄  ░▓█▄   ▌░██░▒▓█  ▄ ▒██▀▀█▄  ▒██   ██░▓██▒  ▐▌██▒
+  ▒██▒ ░ ░ ████▓▒░░▒████▓ ░ ████▓▒░▒██████▒▒   ▒██▒ ░  ░░▒████▒░██▓ ▒██▒░▒████▓ ░██░░▒████▒░██▓ ▒██▒░ ████▓▒░▒██░   ▓██░
+  ▒ ░░   ░ ▒░▒░▒░  ▒▒▓  ▒ ░ ▒░▒░▒░ ▒ ▒▓▒ ▒ ░   ▒▓▒░ ░  ░░░ ▒░ ░░ ▒▓ ░▒▓░ ▒▒▓  ▒ ░▓  ░░ ▒░ ░░ ▒▓ ░▒▓░░ ▒░▒░▒░ ░ ▒░   ▒ ▒ 
+    ░      ░ ▒ ▒░  ░ ▒  ▒   ░ ▒ ▒░ ░ ░▒  ░ ░   ░▒ ░      ░ ░  ░  ░▒ ░ ▒░ ░ ▒  ▒  ▒ ░ ░ ░  ░  ░▒ ░ ▒░  ░ ▒ ▒░ ░ ░░   ░ ▒░
+  ░      ░ ░ ░ ▒   ░ ░  ░ ░ ░ ░ ▒  ░  ░  ░     ░░          ░     ░░   ░  ░ ░  ░  ▒ ░   ░     ░░   ░ ░ ░ ░ ▒     ░   ░ ░ 
+             ░ ░     ░        ░ ░        ░                 ░  ░   ░        ░     ░     ░  ░   ░         ░ ░           ░ 
+                   ░                                                     ░                                              ");
         }
         
         
@@ -96,6 +133,7 @@ public class program
         personajeAux.Nivel = rand.Next(1,10);
         personajeAux.Velocidad = rand.Next(1,10);
         personajeAux.Nacimiento = CrearFechaAleatoria();
+        
         DateTime FActual = DateTime.Now;
         personajeAux.Edad = FActual.Year - personajeAux.Nacimiento.Year;
         personajeAux.Tipo = Tipos[rand.Next(0,Tipos.Length)];
@@ -108,32 +146,48 @@ public class program
     public static DateTime CrearFechaAleatoria()
     {
         Random aleatorio = new Random();
-        return new DateTime(aleatorio.Next(1980, 2005), aleatorio.Next(1, 12), aleatorio.Next(1, 28));
+        return  new DateTime(aleatorio.Next(1980, 2005), aleatorio.Next(1, 12), aleatorio.Next(1, 28));
     }
 
     
 
     
-    public static Personaje Combate(Personaje P1,Personaje P2){
+    public static Personaje Combate(Personaje P1,Personaje P2){     
         int P1Salud = P1.Salud;
         int P2Salud = P2.Salud; 
-        for (int i = 0; i < 4; i++)
-        {   if (P1.Salud>0 && P2.Salud>0)
+        for (int i = 0; i < 3; i++)
+        {   
+            int danio = 0;
+            if (P1.Salud>0 && P2.Salud>0)
             {
+                Console.WriteLine("\n!!RONDA: "+(i+1)+" !!");
+                
 
                 if (Turnos(P1,P2) == 1)
-                {
-                    P2.Salud = P2.Salud - normalizador(((ValorAtaque(P1)-ValorDefenza(P2))/50)*100);
+                {   
+                    Console.WriteLine("¡¡¡ "+P1.Nombre + " Ataca a "+P2.Nombre+" !!!");
+                    danio =  normalizador((ValorAtaque(P1)-ValorDefenza(P2))/10);
+                    P2.Salud = P2.Salud - danio;
+                    comentarios(danio);
                     if (P2.Salud > 0)
                     {
-                        P1.Salud = P1.Salud - normalizador(((ValorAtaque(P2)-ValorDefenza(P1))/50)*100);
+                        Console.WriteLine("¡¡¡ "+P2.Nombre + " Ataca a "+P1.Nombre+" !!!");
+                        danio = normalizador((ValorAtaque(P2)-ValorDefenza(P1))/10);
+                        P1.Salud = P1.Salud - danio;
+                        comentarios(danio);
                     }
                 }else
                 {
-                    P1.Salud = P1.Salud - normalizador(((ValorAtaque(P2)-ValorDefenza(P1))/50)*100);
+                    Console.WriteLine("¡¡¡ "+P2.Nombre + " Ataca a "+P1.Nombre+" !!!");
+                    danio = normalizador((ValorAtaque(P2)-ValorDefenza(P1))/10);
+                    P1.Salud = P1.Salud - danio;
+                    comentarios(danio);
                     if (P1.Salud > 0)
                     {
-                        P2.Salud = P2.Salud - normalizador(((ValorAtaque(P1)-ValorDefenza(P2))/50)*100);
+                        Console.WriteLine("¡¡¡ "+P1.Nombre + " Ataca a "+P2.Nombre+" !!!");
+                        danio =  normalizador((ValorAtaque(P1)-ValorDefenza(P2))/106);
+                        P2.Salud = P2.Salud - danio;
+                        comentarios(danio);
                     }
                 }
             }
@@ -141,20 +195,39 @@ public class program
         if (P1.Salud > P2.Salud)
         {
             P1.Salud = P1Salud;
+            Console.WriteLine("¡¡¡EL GANADOR DE ESTE COMBATE ES: "+ P1.Nombre + "!!!");
             return P1;
         }else
         {
             if (P1.Salud < P2.Salud)
             {   
+                Console.WriteLine("¡¡¡EL GANADOR DE ESTE COMBATE ES: "+ P2.Nombre + "!!!");
                 P2.Salud = P2Salud;
                 return P2;
             }else
             {
+                Console.WriteLine("¡¡¡EN ESTE COMBATE NO HUVO GANADORES!!! T_T");
+                
                 return null;
             }
         }
     }
 
+    public static void comentarios(int danio){
+        if (danio == 0)
+        {
+            Console.WriteLine("¡¡¡PERO FALLA EPICAMENTE!!!");
+        }else
+        {
+            if (danio < 50)
+            {
+                Console.WriteLine("¡¡¡Y conecta!!!");
+            }else
+            {
+                Console.WriteLine("¡¡¡UN GOLPE DEVASTADOR!!! Eso tiene que arder");
+            }
+        }
+    }
     //determina quien va preimero en cada ronda, 1 D20 + destreza
     public static int Turnos(Personaje P1, Personaje P2){
         
@@ -220,7 +293,7 @@ public class program
         return P;
     }
 
-    public static int normalizador(int valor){
+    public static int normalizador(int valor){  //para que no hala valores negativos 
         if (valor < 0)
         {
             return 0;
@@ -268,14 +341,17 @@ public class program
         filestreamJson.Close();
     }
 
-    public static List<Personaje> clasificaciones(List<Personaje> Participantes){
+    public static List<Personaje> clasificaciones(List<Personaje> Participantes, int NCombate){  //rondas de los combates
         List<Personaje> EnCarrera = new List<Personaje>(); 
         Personaje Ganador = new Personaje();
         int restantes = Participantes.Count;   
         int total = restantes;
+        
         for (int i = 0; i < total; i = i + 2)
         {
-            
+            NCombate ++;
+            Console.WriteLine(" \ncombate N°"+NCombate);
+            Console.WriteLine("\n¡¡A LUCHAR!!");
             Ganador = Combate(Participantes[i], Participantes[i+1]);
             if (Ganador != null)
             {
