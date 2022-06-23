@@ -21,7 +21,7 @@ public class Personaje{
         Console.WriteLine("Apodo: "+ this.Apodo);
         Console.WriteLine("Edad: "+ this.Edad);
         Console.WriteLine("Fecha de nacimiento: "+ this.Nacimiento.ToLongDateString());
-        Console.WriteLine("Tipo: "+ this.Tipo);
+        Console.WriteLine("Clase: "+ this.Tipo);
     }
 
     public void MostrarPersonajeCaracteristicas(){

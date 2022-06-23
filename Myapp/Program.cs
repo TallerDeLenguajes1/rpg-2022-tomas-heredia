@@ -13,7 +13,7 @@ public class program
     
     public static string[] Nombres = {"Tomas", "Irina","Gonsalo","Maria"," Pepe", "juanita","Tulio","Joaquin","Fernada","Miguel","Juan","Dario", "Emilio"}; //nombres, apodos y clases para los Pj
     public static string[] Apodos = {"Mastropiero", "Unsigned","TuNoMeteCabraSarabanbichuie","La Parka","N° 1","Frijolito","EL maestro del surf"};
-    public static string[] Tipos  = {"Guerrero","Ladron","Paladin","Monje","Espadachin","Artifice"};
+
     public static void Main(String[] args){
         
         //lista de participantes
