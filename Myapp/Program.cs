@@ -1,15 +1,18 @@
 ﻿using System;
+using System.Net;
 using RPG;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using APIClases;
+
 public class program
 {
     public static int total = 4;
-   
+   public static int NCombate = 0;
     public static string NombreArchivoJson = @"C:\Users\usuario\Documents\1er2022\taller1\ganadores\Participantes.json";  //ubicacion del json
     
     public static string[] Nombres = {"Tomas", "Irina","Gonsalo","Maria"," Pepe", "juanita","Tulio","Joaquin","Fernada","Miguel","Juan","Dario", "Emilio"}; //nombres, apodos y clases para los Pj
-    public static string[] Apodos = {"Aniquilador", "Fachero","TuNoMeteCabraSarabanbichuie","Pablito","Muchitastico","Frijolito","EL maestro del surf"};
+    public static string[] Apodos = {"Mastropiero", "Unsigned","TuNoMeteCabraSarabanbichuie","La Parka","N° 1","Frijolito","EL maestro del surf"};
     public static string[] Tipos  = {"Guerrero","Ladron","Paladin","Monje","Espadachin","Artifice"};
     public static void Main(String[] args){
         
@@ -75,16 +78,21 @@ public class program
             
         guardarParticipantes(Participantes);
         
+        Console.WriteLine("¡¡¡NUESTRAS VICTI, DIGO, PARTICIPANTES DE HOY SON...!!! ");
+
         for (int i = 0; i < Participantes.Count; i++) //muestra
         {
             Participantes[i].MostrarPersonajeDatos();
             Participantes[i].MostrarPersonajeCaracteristicas();
         }
 
-        int NCombate = 0;
+        Console.WriteLine("¡¡¡QUE EMPIECE LA MASACRE!!! ");
+        Console.ReadKey();
+        
+        
         while (Participantes.Count > 1)      //combates
         {
-            Participantes = clasificaciones(Participantes,NCombate);
+            Participantes = clasificaciones(Participantes);
         }
         
         
@@ -124,6 +132,8 @@ public class program
         
         Random rand = new Random();
         Personaje personajeAux = new Personaje();
+        List<string>clases = new List<string>();
+        clases = DnDClases();
         personajeAux.Nombre = Nombres[rand.Next(0,Nombres.Length)];
         personajeAux.Apodo = Apodos[rand.Next(0,Apodos.Length)];
         personajeAux.Salud = 100;
@@ -136,7 +146,7 @@ public class program
         
         DateTime FActual = DateTime.Now;
         personajeAux.Edad = FActual.Year - personajeAux.Nacimiento.Year;
-        personajeAux.Tipo = Tipos[rand.Next(0,Tipos.Length)];
+        personajeAux.Tipo = clases[rand.Next(0,clases.Count)];
 
 
 
@@ -161,6 +171,7 @@ public class program
             if (P1.Salud>0 && P2.Salud>0)
             {
                 Console.WriteLine("\n!!RONDA: "+(i+1)+" !!");
+                Console.ReadKey();
                 
 
                 if (Turnos(P1,P2) == 1)
@@ -196,17 +207,20 @@ public class program
         {
             P1.Salud = P1Salud;
             Console.WriteLine("¡¡¡EL GANADOR DE ESTE COMBATE ES: "+ P1.Nombre + "!!!");
+            Console.ReadKey();
             return P1;
         }else
         {
             if (P1.Salud < P2.Salud)
             {   
                 Console.WriteLine("¡¡¡EL GANADOR DE ESTE COMBATE ES: "+ P2.Nombre + "!!!");
+                Console.ReadKey();
                 P2.Salud = P2Salud;
                 return P2;
             }else
             {
                 Console.WriteLine("¡¡¡EN ESTE COMBATE NO HUVO GANADORES!!! T_T");
+                Console.ReadKey();
                 
                 return null;
             }
@@ -217,14 +231,17 @@ public class program
         if (danio == 0)
         {
             Console.WriteLine("¡¡¡PERO FALLA EPICAMENTE!!!");
+            Console.ReadKey();
         }else
         {
             if (danio < 50)
             {
                 Console.WriteLine("¡¡¡Y conecta!!!");
+                Console.ReadKey();
             }else
             {
                 Console.WriteLine("¡¡¡UN GOLPE DEVASTADOR!!! Eso tiene que arder");
+                Console.ReadKey();
             }
         }
     }
@@ -341,7 +358,7 @@ public class program
         filestreamJson.Close();
     }
 
-    public static List<Personaje> clasificaciones(List<Personaje> Participantes, int NCombate){  //rondas de los combates
+    public static List<Personaje> clasificaciones(List<Personaje> Participantes){  //rondas de los combates
         List<Personaje> EnCarrera = new List<Personaje>(); 
         Personaje Ganador = new Personaje();
         int restantes = Participantes.Count;   
@@ -352,6 +369,7 @@ public class program
             NCombate ++;
             Console.WriteLine(" \ncombate N°"+NCombate);
             Console.WriteLine("\n¡¡A LUCHAR!!");
+            Console.ReadKey();
             Ganador = Combate(Participantes[i], Participantes[i+1]);
             if (Ganador != null)
             {
@@ -381,5 +399,46 @@ public class program
             
             
         }
+
+
+    public static List<string> DnDClases(){
+        Root Clases;
+        
+        List<string> ListaClases = new List<string>();
+        var url = "https://www.dnd5eapi.co/api/classes";
+        var request = (HttpWebRequest) WebRequest.Create(url);
+        request.Method = "GET";
+        request.ContentType = "application/json";
+        request.Accept = "application/json";
+
+        try{
+            using(WebResponse respuesta = request.GetResponse()){
+                using(Stream StreamReader = respuesta.GetResponseStream()){
+                    if (StreamReader != null)
+                    {
+                        using (StreamReader objReader = new StreamReader(StreamReader))
+                        {
+                            string responseBody = objReader.ReadToEnd();
+                            Clases = JsonSerializer.Deserialize<Root>(responseBody);
+                            foreach (DnDClases clase in Clases.Results)
+                            {
+                                ListaClases.Add(clase.Name);
+                            }
+
+                        }
+                        return ListaClases;
+                    }else
+                    {
+                        Console.WriteLine("No Responde");
+                        return null;
+                    }
+                }
+            }
+            
+        }catch(WebException e){
+                Console.WriteLine(e.ToString());
+                return null;
+    }
+    }
 }
 
