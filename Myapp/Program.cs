@@ -196,7 +196,7 @@ public class program
                     if (P1.Salud > 0)
                     {
                         Console.WriteLine("¡¡¡ "+P1.Nombre + " Ataca a "+P2.Nombre+" !!!");
-                        danio =  normalizador((ValorAtaque(P1)-ValorDefenza(P2))/106);
+                        danio =  normalizador((ValorAtaque(P1)-ValorDefenza(P2))/10);
                         P2.Salud = P2.Salud - danio;
                         comentarios(danio);
                     }
