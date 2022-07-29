@@ -280,31 +280,31 @@ public class program
     // un dado de 20 caras, si, esto sera calabosos y dragones
     public static int D20(){
         Random aleatorio = new Random();
-        return aleatorio.Next(1,20);
+        return aleatorio.Next(1,21);
     }
 
     //calculo de los aumentos por victoria
     public static Personaje Bonus(Personaje P){
         Random aleatorio = new Random();
-        switch (aleatorio.Next(1,6))
+        switch (aleatorio.Next(1,7))
         {
             case 1:
                 P.Salud += 10;
                 break;
             case 2:
-                P.Velocidad += P.Velocidad*aleatorio.Next(5,10)/100;
+                P.Velocidad += P.Velocidad*aleatorio.Next(5,11)/100;
                 break;
             case 3:
-                P.Destreza += P.Destreza*aleatorio.Next(5,10)/100;
+                P.Destreza += P.Destreza*aleatorio.Next(5,11)/100;
                 break;
             case 4:
-                P.Fuerza += P.Fuerza*aleatorio.Next(5,10)/100;
+                P.Fuerza += P.Fuerza*aleatorio.Next(5,11)/100;
                 break;
             case 5:
                 P.Nivel += 1;
                 break;
             case 6:
-                P.Armadura += P.Armadura*aleatorio.Next(5,10)/100;
+                P.Armadura += P.Armadura*aleatorio.Next(5,11)/100;
                 break;
         }
         return P;
