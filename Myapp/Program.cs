@@ -137,11 +137,11 @@ public class program
         personajeAux.Nombre = Nombres[rand.Next(0,Nombres.Length)];
         personajeAux.Apodo = Apodos[rand.Next(0,Apodos.Length)];
         personajeAux.Salud = 100;
-        personajeAux.Armadura = rand.Next(1,10);
-        personajeAux.Destreza = rand.Next(1,10);
-        personajeAux.Fuerza = rand.Next(1,10);
-        personajeAux.Nivel = rand.Next(1,10);
-        personajeAux.Velocidad = rand.Next(1,10);
+        personajeAux.Armadura = rand.Next(1,11);
+        personajeAux.Destreza = rand.Next(1,11);
+        personajeAux.Fuerza = rand.Next(1,11);
+        personajeAux.Nivel = rand.Next(1,11);
+        personajeAux.Velocidad = rand.Next(1,11);
         personajeAux.Nacimiento = CrearFechaAleatoria();
         
         DateTime FActual = DateTime.Now;
